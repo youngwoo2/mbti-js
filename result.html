@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나는 어떤 막내일까?</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="./css/style.css" rel="stylesheet">
+</head>
+<body class="container text-center"> 
+    <img id="img" class="rounded-circle mt-30" width="200px" src="./img/result.png" alt="result"> 
+    <h2 id="mbtiType" class="mt-30">결과 MBTI</h2> 
+    <h3 id="explain" class="mt-30">결과 설명</h3> 
+
+    <!-- 공유 버튼 -->
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=63fd5c71e17d540019016c21&product=inline-share-buttons&source=platform" async="async"></script>
+    <div class="sharethis-inline-share-buttons mt-100"></div>
+    
+    <!-- 댓글 -->
+    <!-- <div id="disqus_thread"></div>
+    <script>
+        /**
+        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+        /*
+        var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        */
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://magnae-mbti.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        /* 
+            [Step 01] 초기화
+            결과 타입과 설명 JSON으로 구성하기 
+        */
+        var result = {
+            "ISTJ" : {"mbtiType": "선비정신, ISTJ", "explain": "저는 직장의 든든한 일꾼입니다. 저는 구조와 루틴을 중시하며 항상 효율성을 최적화할 수 있는 방법을 찾고 있습니다. 신뢰할 수 있고 철저하며 더러워지는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ISFJ" : {"mbtiType": "말 잘 듣는 일꾼, ISTP", "explain": "저는 직장에서 보살피는 양육자입니다. 저는 제가 하는 모든 일에 자비로운 손길을 더하며, 항상 다른 사람들을 지원하고 고양시킬 방법을 찾고 있습니다. 인내심 있고 공감하며 도움의 손길을 내미는 것을 두려워하지 않는 사람이 필요하다면 제가 바로 그 사람입니다."},
+            "INFJ" : {"mbtiType": "시키기도 전에 일 끝냄, INFJ", "explain": "저는 직장에서 통찰력 있는 선구자입니다. 직관력이 뛰어나며 항상 긍정적인 영향을 미칠 수 있는 방법을 찾고 있습니다. 창의적이고 공감 능력이 뛰어나며 틀에 박힌 생각을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "INTJ" : {"mbtiType": "잘 되면 내 덕, 안 되면 네 탓, INTJ", "explain": "저는 직장에서 전략적인 부분을 담당합니다. 저는 복잡한 문제를 분석하는 것을 좋아하고 항상 혁신적인 솔루션을 만들 방법을 찾고 있습니다. 논리적이고 결단력이 있으며 현 상태에 도전하는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ISTP" : {"mbtiType": "잡학사전, ISTP", "explain": "저는 직장에서 실무적인 문제 해결사입니다. 저는 실질적인 문제를 잘 해결하고 항상 정면으로 맞설 수 있는 방법을 찾고 있습니다. 수완이 풍부하고 독립적이며 위험을 감수하는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ISFP" : {"mbtiType": "비폭력 불복종, ISFP", "explain": "저는 직장의 예술적 영혼입니다. 저는 제가 하는 모든 일에 창의적인 감각을 불어넣고, 항상 제 업무에 아름다움과 의미를 불어넣을 방법을 찾고 있습니다. 민감하고 직관적이며 틀에 박힌 사고를 두려워하지 않는 사람이 필요하다면 제가 적격입니다."},
+            "INFP" : {"mbtiType": "힉힉호무리, INFP", "explain": "저는 직장의 몽상가입니다. 저는 내면이 풍부하고 제 가치와 열정을 실현할 방법을 항상 찾고 있습니다. 이상주의적이고 공감 능력이 뛰어나며 꿈을 추구하는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "INTP" : {"mbtiType": "고집불통, INTP", "explain": "저는 직장에서 분석적인 사고를 하는 사람입니다. 새로운 아이디어를 탐구하는 것을 좋아하고 세상에 대한 이해를 넓힐 수 있는 방법을 항상 찾고 있습니다. 논리적이고 호기심이 많으며 기존의 통념에 도전하는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ESTP" : {"mbtiType": "개 썅 마이웨이, ESTP 막내", "explain": "저는 직장에서 모험적인 위험을 감수하는 스타일입니다. 저는 흥분을 즐기며 항상 한계를 뛰어넘고 제 한계를 시험할 방법을 찾고 있습니다. 대담하고 자발적이며 새로운 도전을 두려워하지 않는 사람이 필요하다면 제가 적격입니다."},
+            "ESFP" : {"mbtiType": "관종 그자체, ESFP 막내", "explain": "저는 직장에서 파티의 생명입니다. 저는 모든 일에 재미를 사랑하는 에너지를 불어넣고, 일을 놀이처럼 느낄 수 있는 방법을 항상 찾고 있습니다. 외향적이고 열정적이며 직장에 재미를 불어넣는 것을 두려워하지 않는 사람이 필요하다면 제가 적격입니다."},
+            "ENFP" : {"mbtiType": "빨리 끝내고 놀고 싶음, ENFP 막내", "explain": "저는 직장의 열정적인 치어리더입니다. 저는 모든 일에 전염성 있는 낙관주의를 가지고 있으며, 항상 다른 사람들에게 영감을 주고 동기를 부여할 방법을 찾고 있습니다. 열정적이고 창의적이며 큰 꿈을 꾸는 것을 두려워하지 않는 사람이 필요하다면 제가 바로 그 사람입니다."},
+            "ENTP" : {"mbtiType": "얼떨결에 제일 힘든 일 함, ENTP 막내", "explain": "저는 직장의 혁신적인 선구자입니다. 저는 새로운 아이디어를 탐구하는 것을 좋아하고 항상 가능성의 한계를 뛰어넘을 방법을 찾고 있습니다. 창의적이고 대담하며 위험을 감수하는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ESTJ" : {"mbtiType": "꼰대 끝판왕, ESTJ 막내", "explain": "저는 직장에서의 말도 안 되는 리더입니다. 저는 구조와 질서를 중시하며 항상 효율성을 최적화할 수 있는 방법을 찾고 있습니다. 결단력 있고 자신감 넘치며 책임지는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ESFJ" : {"mbtiType": "일 < 친목질, ESFJ 막내", "explain": "저는 직장의 사교적인 나비입니다. 저는 제가 하는 모든 일에 따뜻하고 친근한 에너지를 불어넣고 항상 다른 사람들과 소통할 방법을 찾고 있습니다. 사교적이고 보살피며 관계 형성을 두려워하지 않는 사람이 필요하다면 제가 적격입니다."},
+            "ENFJ" : {"mbtiType": "프리젠테이션 담당 말빨 황제, ENFJ 막내", "explain": "저는 직장에서 카리스마 넘치는 동기를 부여하는 사람입니다. 저는 다른 사람들에게 영감을 주고 이끌 수 있는 타고난 능력을 가지고 있으며, 항상 사람들의 장점을 끌어낼 수 있는 방법을 찾고 있습니다. 설득력 있고 공감하며 팀을 결집하는 데 주저하지 않는 사람이 필요하다면 제가 적임자입니다."},
+            "ENTJ" : {"mbtiType": "타고난 팀장, ENTJ 막내", "explain": "저는 직장의 전략 사령관입니다. 저는 야심찬 목표를 세우는 것을 좋아하고 이를 달성하기 위한 방법을 항상 찾고 있습니다. 단호하고 분석적이며 위험을 감수하는 것을 두려워하지 않는 사람이 필요하다면 제가 적임자입니다."},
+        }
+
+        /* 
+            [Step 02] 결과 출력
+            URL에서 mbti 결과를 가지고 와서, 해당하는 mbti 출력
+        */
+        $(document).ready(function(){
+
+        });
+    </script>
+</body>
+</html>

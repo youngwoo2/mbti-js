@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나는 어떤 막내일까?</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="./css/style.css" rel="stylesheet">
+</head>
+<body class="container text-center"> 
+    <p class="fs-3 mt-100">
+        <span id="no">번호</span> 문제 / 12 문제
+    </p>
+    <div id="title" class="fs-1 mt-30"> 
+        질문
+    </div>
+    <div class="d-grid gap-2 mt-100"> 
+        <button id="A" class="btn btn-primary">답변 A</button> 
+        <button id="B" class="btn btn-primary">답변 B</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <script>
+        /* 
+            HTML 코드는 수정 금지
+            아래에만 코드를 추가해 로직 구현하기
+        */
+
+
+        /* 
+            [Step 01] 초기화
+            문제 번호는 0번으로 초기화, 문제와 답변 JSON으로 구성하기 
+        */
+
+        const questionList = [
+            {
+                "title": "회사에 출근한 첫날, 기분이 어떤가?", 
+                "type": "EI", 
+                "A": "두근두근 설레, 어떤 사람들이 있을까? ", 
+                "B": "회색 콘크리트, 높은 건물, 차가운 책상.. 내가 잘 할 수 있을까?"
+            },
+            {
+                "title": "출근 후 동료들과 처음 하는 점심식사, 어떤가?", 
+                "type": "EI", 
+                "A": "오, 뭐 먹지? 배고파 맛있겠다!",
+                "B": "밥 먹으면서 무슨 이야기를 해야하지..? 자연스럽게 잘 이야기해보고 싶다"
+            },
+            {
+                "title": "나를 비롯한 팀 차원에서 환영회 회식 자리, 기분이 어떤가?", 
+                "type": "EI", 
+                "A": "얼마만의 술이야, 너무 신나, 가보자고 ",
+                "B": "후 적당히 먹고 빨리 가고 싶다 ㅎ"
+            },
+            {
+                "title": "처음으로 참석한 팀 회의, 어떻게 하는 게 좋을까?", 
+                "type": "SN", 
+                "A": "회의 참석 전 아젠다를 꼼꼼하게 읽어보고 의견을 준비한다",
+                "B": "회의 때 팀장님의 손 끝, 작은 표정 변화를 캐치한다"
+            },
+            {
+                "title": "회식 장소를 예약하라는 팀장님의 지시를 받았다. 어떻게 할까? ", 
+                "type": "SN", 
+                "A": "장소, 메뉴, 분위기, 쾌적성 등 여러 요소를 고려해 후보 식당을 리스트업하고 컨펌받는 게 좋겠다",
+                "B": "포털 사이트에서 몇몇 맛집을 찾아보니 ‘여기가 좋을 것 같다’는 생각이 든다. 결정하여 팀장님에게 보고한다"
+            },
+            {
+                "title": "사수인 김 대리님이 최 팀장님이 지시한 중요한 프로젝트에서 공정하지 못한 이유로 배제 되었다. 어떤 생각이 들까?", 
+                "type": "SN", 
+                "A": "그렇군 ",
+                "B": "김 대리님이 배제된 이유가 뭘까? 내가 모르는 이전의 어떤 비하인드 스토리가 있었을까? 그게 무엇일까? 상상해본다"
+            },
+            {
+                "title": "함께 입사한 동료가 상사의 괴롭힘을 토로하며 상담을 해왔다. 무엇이라고 말할 것인가? ", 
+                "type": "TF", 
+                "A": "현실적으로 상사와 떨어지는 게 어렵기 때문에, 잘 적응해볼 방법을 말해줄 것 같다",
+                "B": "무슨 일이 있었는지, 얼마나 힘들었는지 물어보고 같이 마음 아파 한다"
+            },
+            {
+                "title": "궁금한 게 생겨 고민이다. 어떻게 할 것인가? ", 
+                "type": "TF", 
+                "A": "대리님께 바로 질문한다",
+                "B": "대리님이 지금 바빠 보이기 때문에 타이밍 잡기가 어렵다. 우선은 혼자 좀 더 찾아본다"
+            },
+            {
+                "title": "회사에 전화가 울렸다. 우리 회사는 내선번호 하나를 사용하기 때문에, 막내인 내가 받아야만 한다. 수화기를 들고 응대하는데, 누구에게 연결해야 할지 모르겠다. 어떻게 할까? ", 
+                "type": "TF", 
+                "A": "사수 또는 옆자리 선배에게 질문한다 ",
+                "B": "옆자리 선배가 너무 바빠 보여서 우선 스스로 해보려 한다. 전화선을 뽑아 버리고 싶다 ㅎ"
+            },
+            {
+                "title": "첫 출근을 앞둔 전날 밤, 무슨 생각을 하는가?", 
+                "type": "JP", 
+                "A": "내일 입을 옷, 가져갈 가방, 첫 출근 체크리스트 준비 완료! 두근두근",
+                "B": "내일 일은 내일의 나에게"
+            },
+            {
+                "title": "A 프로젝트의 자료조사를 맡았다. 어떻게 진행할 것인가?", 
+                "type": "JP", 
+                "A": "자료조사의 업무를 세분화해서 목차를 정하고, 정리하고, 마무리하는 데 필요한 시간을 예측해서 투두리스트를 세운다",
+                "B": "다음주까지 7일의 시간이 있으므로 5일 전 정도부터 시작하기로 한다"
+            },
+            {
+                "title": "첫 월급을 받았다. 어떻게 사용할 것인가? ", 
+                "type": "JP", 
+                "A": "우선, 저축할 돈부터 미리 빼두고 생활비 안에서 사고 싶은 것을 산다",
+                "B": "수고한 나에게 박수를! 나를 위한 금융치료에 나선다"
+            }
+        ];
+
+        /* 
+            [Step 02] 다음 문제로 이동
+             ㄴ no 값을 증가시키고
+                ㄴ no 값이 마지막 질문을 넘어갔다면 결과 페이지로 이동,
+                ㄴ 아니면 다음 문제를 출력
+        */
+        function next() {
+            
+            /* 
+                [Step 03] no 값이 마지막 질문을 넘어갔을 때
+                 ㄴ MBTI를 계산하고 결과 페이지(result.html)로 이동
+                 ㄴ 이동할 때 MBTI 결과를 파라미터로 전달
+            */
+
+        }
+
+        /* 
+            [Step 04] 문제 출력
+             ㄴ 문제와 답변은 문제 데이터(questionList)에 있는 데이터 이용
+        */
+        function render() {
+
+        }
+
+        /* 
+            [Step 05] 점수를 추가하는 함수
+             ㄴ (A 버튼을 클릭한 경우) EI, SN, TF, JP에 해당하는 값을 1증가,
+        */
+        const addScore = () => {
+
+        }
+
+        /* 
+            [Step 06] test.html 페이지에 처음 들어왔을 때
+             ㄴ 문제 출력
+             ㄴ A 버튼을 클릭하면 점수 증가 후 다음 문제로 이동
+             ㄴ B 버튼을 클릭하면 다음 문제로 이동
+        */
+        $(document).ready(function() {
+
+        });
+  </script>
+</body>
+</html>
